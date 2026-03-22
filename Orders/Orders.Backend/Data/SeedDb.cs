@@ -70,61 +70,61 @@ namespace Orders.Backend.Data
                 _ = _context.Countries.Add(new Country
                 {
                     Name = "Colombia",
-                    //States =
-                    //[
-                    //    new State()
-                    //    {
-                    //        Name = "Antioquia",
-                    //        Cities = [
-                    //            new() { Name = "Medellín" },
-                    //            new() { Name = "Itagüí" },
-                    //            new() { Name = "Envigado" },
-                    //            new() { Name = "Bello" },
-                    //            new() { Name = "Rionegro" },
-                    //            new() { Name = "Marinilla" },
-                    //        ]
-                    //    },
-                    //    new State()
-                    //    {
-                    //        Name = "Bogotá",
-                    //        Cities = [
-                    //            new() { Name = "Usaquen" },
-                    //            new() { Name = "Champinero" },
-                    //            new() { Name = "Santa fe" },
-                    //            new() { Name = "Useme" },
-                    //            new() { Name = "Bosa" },
-                    //        ]
-                    //    },
-                    //]
+                    States =
+                    [
+                        new State()
+                        {
+                            Name = "Antioquia",
+                            Cities = [
+                                new() { Name = "Medellín" },
+                                new() { Name = "Itagüí" },
+                                new() { Name = "Envigado" },
+                                new() { Name = "Bello" },
+                                new() { Name = "Rionegro" },
+                                new() { Name = "Marinilla" },
+                            ]
+                        },
+                        new State()
+                        {
+                            Name = "Bogotá",
+                            Cities = [
+                                new() { Name = "Usaquen" },
+                                new() { Name = "Champinero" },
+                                new() { Name = "Santa fe" },
+                                new() { Name = "Useme" },
+                                new() { Name = "Bosa" },
+                            ]
+                        },
+                    ]
                 });
                 _context.Countries.Add(new Country
                 {
                     Name = "Estados Unidos",
-                    //States =
-                    //[
-                    //    new State()
-                    //    {
-                    //        Name = "Florida",
-                    //        Cities = [
-                    //            new() { Name = "Orlando" },
-                    //            new() { Name = "Miami" },
-                    //            new() { Name = "Tampa" },
-                    //            new() { Name = "Fort Lauderdale" },
-                    //            new() { Name = "Key West" },
-                    //        ]
-                    //    },
-                    //    new State()
-                    //    {
-                    //        Name = "Texas",
-                    //        Cities = [
-                    //            new() { Name = "Houston" },
-                    //            new() { Name = "San Antonio" },
-                    //            new() { Name = "Dallas" },
-                    //            new() { Name = "Austin" },
-                    //            new() { Name = "El Paso" },
-                    //        ]
-                    //    },
-                    //]
+                    States =
+                    [
+                        new State()
+                        {
+                            Name = "Florida",
+                            Cities = [
+                                new() { Name = "Orlando" },
+                                new() { Name = "Miami" },
+                                new() { Name = "Tampa" },
+                                new() { Name = "Fort Lauderdale" },
+                                new() { Name = "Key West" },
+                            ]
+                        },
+                        new State()
+                        {
+                            Name = "Texas",
+                            Cities = [
+                                new() { Name = "Houston" },
+                                new() { Name = "San Antonio" },
+                                new() { Name = "Dallas" },
+                                new() { Name = "Austin" },
+                                new() { Name = "El Paso" },
+                            ]
+                        },
+                    ]
                 });
             }
 

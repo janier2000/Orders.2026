@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using Orders.Backend.Data;
 using Orders.Backend.Repositories.Implementations;
 using Orders.Backend.Repositories.Interface;
+using Orders.Backend.Repositories.Interfaces;
 using Orders.Backend.UnitsOfWork.Implementations;
 using Orders.Backend.UnitsOfWork.Interfaces;
 using System.Text.Json.Serialization;
@@ -11,7 +12,12 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+// aca envita los ciclo repetitivos deuno a mavio o varios a uno
+// en al tablas ejemplo el de al ciudad  municipio y  ciudad
+builder
+    .Services
+    .AddControllers()
+    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=LocalConnection"));
@@ -19,6 +25,24 @@ builder.Services.AddTransient<SeedDb>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
+
+//builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+//builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
+builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+//builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+//builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+//builder.Services.AddScoped<IStatesRepository, StatesRepository>();
+//builder.Services.AddScoped<ITemporalOrdersRepository, TemporalOrdersRepository>();
+//builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+
+//builder.Services.AddScoped<ICategoriesUnitOfWork, CategoriesUnitOfWork>();
+//builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
+builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
+//builder.Services.AddScoped<IOrdersUnitOfWork, OrdersUnitOfWork>();
+//builder.Services.AddScoped<IProductsUnitOfWork, ProductsUnitOfWork>();
+//builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
+//builder.Services.AddScoped<ITemporalOrdersUnitOfWork, TemporalOrdersUnitOfWork>();
+//builder.Services.AddScoped<IUsersUnitOfWork, UsersUnitOfWork>();
 
 var app = builder.Build();
 SeedData(app);// inyection manual Tutorial 72 - Parte 19 - Alimentador de base de datos https://www.youtube.com/watch?v=VD1b8yAMC7o&list=PLuEZQoW9bRnRBThyGs208ZMrCYBRTvIg2&index=19 

@@ -15,7 +15,8 @@ namespace Orders.Backend.Repositories.Implementations
             _context = context;
             _entity = _context.Set<T>();
         }
-        public async Task<ActionResponse<T>> AddAsync(T entity)
+
+        public virtual async Task<ActionResponse<T>> AddAsync(T entity)
         {
             _context.Add(entity);
             try
@@ -151,6 +152,7 @@ namespace Orders.Backend.Repositories.Implementations
             };
 
         }
+
         private ActionResponse<T> ExceptionActionResponse(Exception exception)
         {
             return new ActionResponse<T>
