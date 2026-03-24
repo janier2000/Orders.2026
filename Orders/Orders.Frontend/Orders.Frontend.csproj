@@ -21,7 +21,6 @@
     <Folder Include="Pages\Cities\" />
     <Folder Include="Pages\Auth\" />
     <Folder Include="Pages\Cart\" />
-    <Folder Include="Pages\States\" />
     <Folder Include="Pages\Products\" />
   </ItemGroup>
 

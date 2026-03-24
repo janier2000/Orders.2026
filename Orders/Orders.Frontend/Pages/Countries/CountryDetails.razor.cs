@@ -64,6 +64,46 @@ namespace Orders.Frontend.Pages.Countries
             //}
         }
 
+        private async Task DeleteAsync(State state)
+        {
+            var result = await SweetAlertService.FireAsync(new SweetAlertOptions
+            {
+                Title = "Confirmación",
+                Text = $"¿Realmente deseas eliminar el departamento/estado? {state.Name}",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true,
+                CancelButtonText = "No",
+                ConfirmButtonText = "Si"
+            });
+
+            var confirm = string.IsNullOrEmpty(result.Value);
+            if (confirm)
+            {
+                return;
+            }
+
+            var responseHttp = await Repository.DeleteAsync<State>($"/api/states/{state.Id}");
+            if (responseHttp.Error)
+            {
+                if (responseHttp.HttpResponseMessage.StatusCode != HttpStatusCode.NotFound)
+                {
+                    var message = await responseHttp.GetErrorMessageAsync();
+                    await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                    return;
+                }
+            }
+
+            await LoadAsync();
+            var toast = SweetAlertService.Mixin(new SweetAlertOptions
+            {
+                Toast = true,
+                Position = SweetAlertPosition.BottomEnd,
+                ShowConfirmButton = true,
+                Timer = 3000
+            });
+            await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro borrado con éxito.");
+        }
+
         //private async Task ShowModalAsync(int id = 0, bool isEdit = false)
         //{
         //    IModalReference modalReference;
@@ -185,44 +225,6 @@ namespace Orders.Frontend.Pages.Countries
         //    return true;
         //}
 
-        //private async Task DeleteAsync(State state)
-        //{
-        //    var result = await SweetAlertService.FireAsync(new SweetAlertOptions
-        //    {
-        //        Title = "Confirmación",
-        //        Text = $"¿Realmente deseas eliminar el departamento/estado? {state.Name}",
-        //        Icon = SweetAlertIcon.Question,
-        //        ShowCancelButton = true,
-        //        CancelButtonText = "No",
-        //        ConfirmButtonText = "Si"
-        //    });
 
-        //    var confirm = string.IsNullOrEmpty(result.Value);
-        //    if (confirm)
-        //    {
-        //        return;
-        //    }
-
-        //    var responseHttp = await Repository.DeleteAsync<State>($"/api/states/{state.Id}");
-        //    if (responseHttp.Error)
-        //    {
-        //        if (responseHttp.HttpResponseMessage.StatusCode != HttpStatusCode.NotFound)
-        //        {
-        //            var message = await responseHttp.GetErrorMessageAsync();
-        //            await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
-        //            return;
-        //        }
-        //    }
-
-        //    await LoadAsync();
-        //    var toast = SweetAlertService.Mixin(new SweetAlertOptions
-        //    {
-        //        Toast = true,
-        //        Position = SweetAlertPosition.BottomEnd,
-        //        ShowConfirmButton = true,
-        //        Timer = 3000
-        //    });
-        //    await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro borrado con éxito.");
-        //}
     }
 }
