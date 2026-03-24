@@ -8,12 +8,41 @@
 
 <GenericList MyList="Countries">
     <Body>
+
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>País</th>
                     <th style="width:210px">Estados / Departamentos</th>
                     <th style="width:168px"></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var country in Countries!)
+                {
+                    <tr>
+                        <td><a href="/countries/details/@country.Id"> @country.Name</a></td>
+                        <td>@country.StatesNumber</td>
+                        <td>
+                            <a href="/countries/edit/@country.Id" class="btn btn-sm btn-warning">Editar</a>
+                            @* <a @onclick=@(() => ShowModalAsync(country.Id, true)) class="btn btn-sm btn-warning"><i class="bi bi-pencil" /> Editar</a> *@
+                            <a class="btn btn-infor btn-sm" href="/countries/details/@country.Id">Detalles</a>
+                            <button @onclick=@(() => DeleteAsycn(country)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+@* 
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>País</th>
+                    <th style="width:210px">Estados / Departamentos</th>
+                    <th style="width:168px"></th>
+                    <th></th>
                 </tr> 
             </thead>
             <tbody>
@@ -23,12 +52,13 @@
                         <th>@country.Name</th>
                          <td>
                              <a href="/countries/edit/@country.Id" class="btn btn-sm btn-warning">Editar</a>
+                             <a class="btn btn-infor btn-sm" href="/countries/details/@country.Id">Detalles</a>
                              <button @onclick=@(() => DeleteAsycn(country)) class="btn btn-sm btn-danger"><i class="bi bi-trash" /> Borrar</button>
                          </td> 
                     </tr>
                 }
             </tbody>
-        </table>
+        </table> *@
     </Body>
 </GenericList>
 
