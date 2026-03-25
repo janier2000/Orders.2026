@@ -27,7 +27,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
 
 //builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
-//builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
+builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 //builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 //builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
@@ -36,7 +36,7 @@ builder.Services.AddScoped<IStatesRepository, StatesRepository>();
 //builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 
 //builder.Services.AddScoped<ICategoriesUnitOfWork, CategoriesUnitOfWork>();
-//builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
+builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
 builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
 //builder.Services.AddScoped<IOrdersUnitOfWork, OrdersUnitOfWork>();
 //builder.Services.AddScoped<IProductsUnitOfWork, ProductsUnitOfWork>();

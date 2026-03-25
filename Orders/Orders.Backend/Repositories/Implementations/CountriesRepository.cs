@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Orders.Backend.Data;
-//using Orders.Backend.Helpers;
+using Orders.Backend.Helpers;
 using Orders.Backend.Repositories.Interfaces;
-//using Orders.Shared.DTOs;
+using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
 using Orders.Shared.Entities.Responses;
-//using Orders.Shared.Responses;
 
 namespace Orders.Backend.Repositories.Implementations
 {
@@ -16,6 +15,41 @@ namespace Orders.Backend.Repositories.Implementations
         public CountriesRepository(DataContext context) : base(context)
         {
             _context = context;
+        }
+
+       
+
+        public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync()
+        {
+            var countries = await _context.Countries
+                                          //.Include(c => c.States)
+                                          .OrderBy(x => x.Name)
+                                          .ToListAsync();
+            return new ActionResponse<IEnumerable<Country>>
+            {
+                WasSuccess = true,
+                Result = countries
+            };
+        }
+
+        public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync(PaginationDTO pagination)
+        {
+            var queryable = _context.Countries
+                                    .Include(c => c.States)
+                                    .AsQueryable();
+
+            //if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            //{
+            //    queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            //}
+
+            return new ActionResponse<IEnumerable<Country>>
+            {
+                WasSuccess = true,
+                Result = await queryable.OrderBy(x => x.Name)
+                                        .Paginate(pagination)
+                                        .ToListAsync()
+            };
         }
 
         public override async Task<ActionResponse<Country>> GetAsync(int id)
@@ -40,19 +74,6 @@ namespace Orders.Backend.Repositories.Implementations
             };
         }
 
-        public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync()
-        {
-            var countries = await _context.Countries
-                                          .Include(c => c.States)
-                                          //.OrderBy(x => x.Name)
-                                          .ToListAsync();
-            return new ActionResponse<IEnumerable<Country>>
-            {
-                WasSuccess = true,
-                Result = countries
-            };
-        }
-
         //public async Task<IEnumerable<Country>> GetComboAsync()
         //{
         //    return await _context.Countries
@@ -60,35 +81,16 @@ namespace Orders.Backend.Repositories.Implementations
         //                         .ToListAsync();
         //}
 
-        //public override async Task<ActionResponse<IEnumerable<Country>>> GetAsync(PaginationDTO pagination)
-        //{
-        //    var queryable = _context.Countries
-        //        .Include(c => c.States)
-        //        .AsQueryable();
 
-        //    if (!string.IsNullOrWhiteSpace(pagination.Filter))
-        //    {
-        //        queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
-        //    }
-
-        //    return new ActionResponse<IEnumerable<Country>>
-        //    {
-        //        WasSuccess = true,
-        //        Result = await queryable
-        //            .OrderBy(x => x.Name)
-        //            .Paginate(pagination)
-        //            .ToListAsync()
-        //    };
-        //}
 
         //public override async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
         //{
         //    var queryable = _context.Countries.AsQueryable();
 
-        //    if (!string.IsNullOrWhiteSpace(pagination.Filter))
-        //    {
-        //        queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
-        //    }
+        //    //if (!string.IsNullOrWhiteSpace(pagination.Filter))
+        //    //{
+        //    //    queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+        //    //}
 
         //    double count = await queryable.CountAsync();
         //    int totalPages = (int)Math.Ceiling(count / pagination.RecordsNumber);
@@ -98,8 +100,5 @@ namespace Orders.Backend.Repositories.Implementations
         //        Result = totalPages
         //    };
         //}
-
-
-
     }
 }
