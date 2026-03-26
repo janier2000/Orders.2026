@@ -14,6 +14,8 @@ namespace Orders.Frontend.Pages.Countries
 {
     public partial class CountriesIndex
     {
+        private int currentPage = 1;
+        private int totalPages;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
@@ -25,18 +27,78 @@ namespace Orders.Frontend.Pages.Countries
             await LoadAsync();
         }
 
-        private async Task LoadAsync()
+        private async Task SelectedPageAsync(int page)
         {
-            //await base.OnInitializedAsync();
-            var responseHttp = await Repository.GetAsync<List<Country>>("api/countries");
+            currentPage = page;
+            await LoadAsync(page);
+        }
 
+        private async Task LoadAsync(int page = 1)
+        {
+            //if (!string.IsNullOrWhiteSpace(Page))
+            //{
+            //    page = Convert.ToInt32(Page);
+            //}
+
+            var ok = await LoadListAsync(page);
+            if (ok)
+            {
+                await LoadPagesAsync();
+            }
+        }
+
+        //private async Task LoadAsync(int page =1)
+        //{
+        //    //await base.OnInitializedAsync();
+        //    var responseHttp = await Repository.GetAsync<List<Country>>("api/countries");
+
+        //    if (responseHttp.Error)
+        //    {
+        //        var message = await responseHttp.GetErrorMessageAsync();
+        //        await SweetAlertService.FireAsync("Error", message,SweetAlertIcon.Error);
+        //        return;
+        //    }
+        //    Countries = responseHttp.Response;
+        //}
+
+        private async Task<bool> LoadListAsync(int page)
+        {
+            //ValidateRecordsNumber();
+            //var url = $"api/countries?page={page}&recordsnumber={RecordsNumber}";
+            var url = $"api/countries?page={page}";
+            //if (!string.IsNullOrEmpty(Filter))
+            //{
+            //    url += $"&filter={Filter}";
+            //}
+
+            var responseHttp = await Repository.GetAsync<List<Country>>(url);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
-                await SweetAlertService.FireAsync("Error", message,SweetAlertIcon.Error);
-                return;
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                return false;
             }
             Countries = responseHttp.Response;
+            return true;
+        }
+
+        private async Task LoadPagesAsync()
+        {
+            //var url = $"api/countries/totalPages?recordsnumber={RecordsNumber}";
+            var url = $"api/countries/totalPages";
+            //if (!string.IsNullOrEmpty(Filter))
+            //{
+            //    url += $"&filter={Filter}";
+            //}
+
+            var responseHttp = await Repository.GetAsync<int>(url);
+            if (responseHttp.Error)
+            {
+                var message = await responseHttp.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                return;
+            }
+            totalPages = responseHttp.Response;
         }
 
         private async Task DeleteAsycn(Country country)

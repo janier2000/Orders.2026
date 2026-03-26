@@ -9,6 +9,8 @@ namespace Orders.Frontend.Pages.Categories
 {
     public partial class CategoriesIndex
     {
+        private int currentPage = 1;
+        private int totalPages;
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
@@ -20,19 +22,82 @@ namespace Orders.Frontend.Pages.Categories
             await LoadAsync();
         }
 
-        private async Task LoadAsync()
+        private async Task SelectedPageAsync(int page)
         {
-            //await base.OnInitializedAsync();
-            var responseHttp = await Repository.GetAsync<List<Category>>("api/categories");
+            //if (!string.IsNullOrWhiteSpace(Page))
+            //{
+            //    page = Convert.ToInt32(Page);
+            //}
 
+            currentPage = page;
+            await LoadAsync(page);
+        }
+
+        private async Task LoadAsync(int page = 1)
+        {
+            var ok = await LoadListAsync(page);
+            if (ok)
+            {
+                await LoadPagesAsync();
+            }
+        }
+
+        //private async Task LoadAsync()
+        //{
+        //    //await base.OnInitializedAsync();
+        //    var responseHttp = await Repository.GetAsync<List<Category>>("api/categories");
+
+        //    if (responseHttp.Error)
+        //    {
+        //        var message = await responseHttp.GetErrorMessageAsync();
+        //        await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+        //        return;
+        //    }
+        //    Categories = responseHttp.Response;
+        //}
+
+        private async Task<bool> LoadListAsync(int page)
+        {
+            //ValidateRecordsNumber();
+            //var url = $"api/categories/?page={page}&recordsnumber={RecordsNumber}";
+            var url = $"api/categories/?page={page}";
+            //if (!string.IsNullOrEmpty(Filter))
+            //{
+            //    url += $"&filter={Filter}";
+            //}
+
+            var responseHttp = await Repository.GetAsync<List<Category>>(url);
+            if (responseHttp.Error)
+            {
+                var message = await responseHttp.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                return false;
+            }
+            Categories = responseHttp.Response;
+            return true;
+        }
+
+        private async Task LoadPagesAsync()
+        {
+            //ValidateRecordsNumber();
+            //var url = $"api/categories/totalPages?recordsnumber={RecordsNumber}";
+            var url = $"api/categories/totalPages";
+            //if (!string.IsNullOrEmpty(Filter))
+            //{
+            //    url += $"&filter={Filter}";
+            //}
+
+            var responseHttp = await Repository.GetAsync<int>(url);
             if (responseHttp.Error)
             {
                 var message = await responseHttp.GetErrorMessageAsync();
                 await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
                 return;
             }
-            Categories = responseHttp.Response;
+            totalPages = responseHttp.Response;
         }
+
+      
 
         private async Task DeleteAsycn(Category category)
         {

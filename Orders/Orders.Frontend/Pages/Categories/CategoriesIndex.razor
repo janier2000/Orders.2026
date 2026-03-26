@@ -8,11 +8,16 @@
 
 <GenericList MyList="Categories">
     <Body>
+        <Pagination CurrentPage="currentPage"
+                    TotalPages="totalPages"
+                    SelectedPage="SelectedPageAsync" />
+        @* RecordsNumber="SelectedRecordsNumberAsync" /> *@
+
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Categoria</th>
-                    <th></th>
+                    <th style="width:90px">Categoria</th>
+                    <th style="width:168px"></th>
                 </tr>
             </thead>
             <tbody>
