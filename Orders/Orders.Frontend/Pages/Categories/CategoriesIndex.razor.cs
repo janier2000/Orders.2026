@@ -14,9 +14,11 @@ namespace Orders.Frontend.Pages.Categories
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
-
+        [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
+        [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+        //[Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
         public List<Category>? Categories { get; set; }
-
+   
         protected async override Task OnInitializedAsync()
         {
             await LoadAsync();
@@ -24,11 +26,10 @@ namespace Orders.Frontend.Pages.Categories
 
         private async Task SelectedPageAsync(int page)
         {
-            //if (!string.IsNullOrWhiteSpace(Page))
-            //{
-            //    page = Convert.ToInt32(Page);
-            //}
-
+            if (!string.IsNullOrWhiteSpace(Page))
+            {
+                page = Convert.ToInt32(Page);
+            }
             currentPage = page;
             await LoadAsync(page);
         }
@@ -61,10 +62,10 @@ namespace Orders.Frontend.Pages.Categories
             //ValidateRecordsNumber();
             //var url = $"api/categories/?page={page}&recordsnumber={RecordsNumber}";
             var url = $"api/categories/?page={page}";
-            //if (!string.IsNullOrEmpty(Filter))
-            //{
-            //    url += $"&filter={Filter}";
-            //}
+            if (!string.IsNullOrEmpty(Filter))
+            {
+                url += $"&filter={Filter}";
+            }
 
             var responseHttp = await Repository.GetAsync<List<Category>>(url);
             if (responseHttp.Error)
@@ -82,10 +83,10 @@ namespace Orders.Frontend.Pages.Categories
             //ValidateRecordsNumber();
             //var url = $"api/categories/totalPages?recordsnumber={RecordsNumber}";
             var url = $"api/categories/totalPages";
-            //if (!string.IsNullOrEmpty(Filter))
-            //{
-            //    url += $"&filter={Filter}";
-            //}
+            if (!string.IsNullOrEmpty(Filter))
+            {
+                url += $"&filter={Filter}";
+            }
 
             var responseHttp = await Repository.GetAsync<int>(url);
             if (responseHttp.Error)
@@ -97,7 +98,17 @@ namespace Orders.Frontend.Pages.Categories
             totalPages = responseHttp.Response;
         }
 
-      
+        private async Task CleanFilterAsync()
+        {
+            Filter = string.Empty;
+            await ApplyFilterAsync();
+        }
+        private async Task ApplyFilterAsync()
+        {
+            int page = 1;
+            await LoadAsync(page);
+        }
+
 
         private async Task DeleteAsycn(Category category)
         {

@@ -10,17 +10,19 @@ namespace Orders.Frontend.Pages.States
 {
     public partial class StateDetails
     {
+        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
+        [Inject] private IRepository Repository { get; set; } = null!;
+        [Parameter] public int StateId { get; set; }
+        [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
+        [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
+        //[Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
+        //[CascadingParameter] IModalService Modal { get; set; } = default!;
         private State? state;
         private List<City>? cities;
         private int currentPage = 1;
         private int totalPages;
 
-        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
-        [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
-        [Inject] private IRepository Repository { get; set; } = null!;
-
-        [Parameter] public int StateId { get; set; }
-       
         protected override async Task OnInitializedAsync()
         {
             await LoadAsync();
@@ -49,6 +51,18 @@ namespace Orders.Frontend.Pages.States
 
         //}
 
+        private async Task CleanFilterAsync()
+        {
+            Filter = string.Empty;
+            await ApplyFilterAsync();
+        }
+        private async Task ApplyFilterAsync()
+        {
+            int page = 1;
+            await LoadAsync(page);
+            await SelectedPageAsync(page);
+        }
+
         private async Task LoadAsync(int page = 1)
         {
             var ok = await LoadStateAsync();
@@ -62,15 +76,26 @@ namespace Orders.Frontend.Pages.States
             }
         }
 
+        private async Task SelectedPageAsync(int page)
+        {
+            //if (!string.IsNullOrWhiteSpace(Page))
+            //{
+            //    page = Convert.ToInt32(Page);
+            //}
+
+            currentPage = page;
+            await LoadAsync(page);
+        }
+
         private async Task LoadPagesAsync()
         {
             //ValidateRecordsNumber();
             //var url = $"api/cities/totalPages?id={StateId}&recordsnumber={RecordsNumber}";
             var url = $"api/cities/totalPages?id={StateId}";
-            //if (!string.IsNullOrEmpty(Filter))
-            //{
-            //    url += $"&filter={Filter}";
-            //}
+            if (!string.IsNullOrEmpty(Filter))
+            {
+                url += $"&filter={Filter}";
+            }
 
             var responseHttp = await Repository.GetAsync<int>(url);
             if (responseHttp.Error)
@@ -81,15 +106,16 @@ namespace Orders.Frontend.Pages.States
             }
             totalPages = responseHttp.Response;
         }
+
         private async Task<bool> LoadCitiesAsync(int page)
         {
             //ValidateRecordsNumber();
             //var url = $"api/cities?id={StateId}&page={page}&recordsnumber={RecordsNumber}";
             var url = $"api/cities?id={StateId}&page={page}";
-            //if (!string.IsNullOrEmpty(Filter))
-            //{
-            //    url += $"&filter={Filter}";
-            //}
+            if (!string.IsNullOrEmpty(Filter))
+            {
+                url += $"&filter={Filter}";
+            }
 
             var responseHttp = await Repository.GetAsync<List<City>>(url);
             if (responseHttp.Error)
@@ -119,17 +145,6 @@ namespace Orders.Frontend.Pages.States
             }
             state = responseHttp.Response;
             return true;
-        }
-
-        private async Task SelectedPageAsync(int page)
-        {
-            //if (!string.IsNullOrWhiteSpace(Page))
-            //{
-            //    page = Convert.ToInt32(Page);
-            //}
-
-            currentPage = page;
-            await LoadAsync(page);
         }
 
         private async Task DeleteAsync(City city)

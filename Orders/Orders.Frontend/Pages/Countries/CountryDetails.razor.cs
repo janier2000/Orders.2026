@@ -83,10 +83,10 @@ namespace Orders.Frontend.Pages.Countries
             //ValidateRecordsNumber();
             //var url = $"api/states/totalPages?id={CountryId}&recordsnumber={RecordsNumber}";
             var url = $"api/states/totalPages?id={CountryId}";
-            //if (!string.IsNullOrEmpty(Filter))
-            //{
-            //    url += $"&filter={Filter}";
-            //}
+            if (!string.IsNullOrEmpty(Filter))
+            {
+                url += $"&filter={Filter}";
+            }
 
             var responseHttp = await Repository.GetAsync<int>(url);
             if (responseHttp.Error)
@@ -103,10 +103,10 @@ namespace Orders.Frontend.Pages.Countries
             //ValidateRecordsNumber();
             //var url = $"api/states?id={CountryId}&page={page}&recordsnumber={RecordsNumber}";
             var url = $"api/states?id={CountryId}&page={page}";
-            //if (!string.IsNullOrEmpty(Filter))
-            //{
-            //    url += $"&filter={Filter}";
-            //}
+            if (!string.IsNullOrEmpty(Filter))
+            {
+                url += $"&filter={Filter}";
+            }
             var responseHttp = await Repository.GetAsync<List<State>>(url);
             if (responseHttp.Error)
             {
@@ -134,6 +134,18 @@ namespace Orders.Frontend.Pages.Countries
             }
             country = responseHttp.Response;
             return true;
+        }
+
+        private async Task CleanFilterAsync()
+        {
+            Filter = string.Empty;
+            await ApplyFilterAsync();
+        }
+        private async Task ApplyFilterAsync()
+        {
+            int page = 1;
+            await LoadAsync(page);
+            await SelectedPageAsync(page);
         }
 
         private async Task SelectedPageAsync(int page)

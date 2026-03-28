@@ -26,23 +26,23 @@ builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
 
-//builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
-//builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
-//builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<IStatesRepository, StatesRepository>();
 //builder.Services.AddScoped<ITemporalOrdersRepository, TemporalOrdersRepository>();
 //builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+//builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+//builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 
-//builder.Services.AddScoped<ICategoriesUnitOfWork, CategoriesUnitOfWork>();
+builder.Services.AddScoped<ICategoriesUnitOfWork, CategoriesUnitOfWork>();
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
 builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
-//builder.Services.AddScoped<IOrdersUnitOfWork, OrdersUnitOfWork>();
-//builder.Services.AddScoped<IProductsUnitOfWork, ProductsUnitOfWork>();
 builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
 //builder.Services.AddScoped<ITemporalOrdersUnitOfWork, TemporalOrdersUnitOfWork>();
 //builder.Services.AddScoped<IUsersUnitOfWork, UsersUnitOfWork>();
+//builder.Services.AddScoped<IOrdersUnitOfWork, OrdersUnitOfWork>();
+//builder.Services.AddScoped<IProductsUnitOfWork, ProductsUnitOfWork>();
 
 var app = builder.Build();
 SeedData(app);// inyection manual Tutorial 72 - Parte 19 - Alimentador de base de datos https://www.youtube.com/watch?v=VD1b8yAMC7o&list=PLuEZQoW9bRnRBThyGs208ZMrCYBRTvIg2&index=19 

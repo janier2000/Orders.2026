@@ -21,7 +21,13 @@ else
                         TotalPages="totalPages"
                         SelectedPage="SelectedPageAsync" />
            @*  RecordsNumber="SelectedRecordsNumberAsync" /> *@
-            @* RecordsNumber="SelectedRecordsNumberAsync" /> *@
+         
+            <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
+                <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar ciudad..." @bind-value="Filter" />
+                <botton type="button" class="btn btn-outline-primary mx-1" @onclick="ApplyFilterAsync">Filtrar</botton>
+                <botton type="button" class="btn btn-outline-danger" @onclick="CleanFilterAsync">Limpiar</botton><botton type="button" class="btn btn-primary mx-1" @onclick="ApplyFilterAsync">Limpiar</botton>
+            </div>
+
             <table class="table table-striped">
                 <thead>
                     <tr>
