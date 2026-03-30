@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Orders.Backend.UnitsOfWork.Interfaces;
 using Orders.Shared.Entities;
+using Orders.Shared.Enums;
 using System.Runtime.InteropServices;
 
 namespace Orders.Backend.Data
@@ -8,10 +10,12 @@ namespace Orders.Backend.Data
     public class SeedDb  
     {
         private readonly DataContext _context;
-        public SeedDb(DataContext context)
+        private IUsersUnitOfWork _usersUnitOfWork;
+
+        public SeedDb(DataContext context, IUsersUnitOfWork usersUnitOfWork)
         {
             _context = context;
-            //_usersUnitOfWork = usersUnitOfWork;
+            _usersUnitOfWork = usersUnitOfWork;
             //_fileStorage = fileStorage;
         }
 
@@ -21,9 +25,10 @@ namespace Orders.Backend.Data
             //await CheckCountriesFullAsync();
             await CheckCountriesAsync();
             await CheckCatregoriesAsync();
-            ////await CheckRolesAsync();
+            await CheckRolesAsync();
             ////await CheckProductsAsync();
-            ////await CheckUserAsync("0001", "Juan", "Zuluaga", "zulu@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "JuanZuluaga.jpg", UserType.Admin);
+            await CheckUserAsync("0001", "Juan", "Zuluaga", "zulu@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "JuanZuluaga.jpg", UserType.Admin);
+
             ////await CheckUserAsync("0002", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpg", UserType.User);
             ////await CheckUserAsync("0003", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
             ////await CheckUserAsync("0004", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
@@ -36,6 +41,58 @@ namespace Orders.Backend.Data
             ////await CheckUserAsync("0011", "Ozzy", "Osbourne", "ozzy@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "ozzy.jpg", UserType.User);
             ////await CheckUserAsync("0012", "Selena", "Quintanilla", "selenba@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "selena.jpg", UserType.User);
         }
+
+        private async Task CheckRolesAsync()
+        {
+            await _usersUnitOfWork.CheckRoleAsync(UserType.Admin.ToString());
+            await _usersUnitOfWork.CheckRoleAsync(UserType.User.ToString());
+        }
+
+        private async Task<User> CheckUserAsync(string document, string firstName, string lastName, string email, string phone, string address, string image, UserType userType)
+        {
+            var user = await _usersUnitOfWork.GetUserAsync(email);
+            if (user == null)
+            {
+                //var city = await _context.Cities.FirstOrDefaultAsync(x => x.Name == "Medellín");
+                //city ??= await _context.Cities.FirstOrDefaultAsync();
+
+                //string filePath;
+                //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                //{
+                //    filePath = $"{Environment.CurrentDirectory}\\Images\\users\\{image}";
+                //}
+                //else
+                //{
+                //    filePath = $"{Environment.CurrentDirectory}/Images/users/{image}";
+                //}
+
+                //var fileBytes = File.ReadAllBytes(filePath);
+                ////var imagePath = await _fileStorage.SaveFileAsync(fileBytes, "jpg", "users");
+
+                user = new User
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    UserName = email,
+                    PhoneNumber = phone,
+                    Address = address,
+                    Document = document,
+                    City = _context.Cities.FirstOrDefault(),
+                    //City = city,
+                    UserType = userType,
+                    //Photo = imagePath,
+                };
+
+                await _usersUnitOfWork.AddUserAsync(user, "123456");
+                await _usersUnitOfWork.AddUserToRoleAsync(user, userType.ToString());
+
+                //var token = await _usersUnitOfWork.GenerateEmailConfirmationTokenAsync(user);
+                //await _usersUnitOfWork.ConfirmEmailAsync(user, token);
+            }
+            return user;
+        }
+
 
         private async Task CheckCatregoriesAsync()
         {

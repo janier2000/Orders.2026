@@ -9,7 +9,7 @@ using CurrieTechnologies.Razor.SweetAlert2;
 
 namespace Orders.Frontend.Pages.States
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public partial class StateCreate
     {
         private State state = new();

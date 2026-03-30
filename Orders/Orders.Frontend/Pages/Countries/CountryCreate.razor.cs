@@ -7,6 +7,7 @@ using Orders.Shared.Entities;
 
 namespace Orders.Frontend.Pages.Countries
 {
+    [Authorize(Roles = "Admin")]
     public partial class CountryCreate
     {
         private Country country = new();

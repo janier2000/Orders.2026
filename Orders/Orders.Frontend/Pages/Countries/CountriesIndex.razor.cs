@@ -12,6 +12,7 @@ using System.Net;
 
 namespace Orders.Frontend.Pages.Countries
 {
+    [Authorize(Roles = "Admin")]
     public partial class CountriesIndex
     {
         private int currentPage = 1;

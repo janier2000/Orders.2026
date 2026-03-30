@@ -7,6 +7,8 @@ using System.Net;
 
 namespace Orders.Frontend.Pages.Categories
 {
+
+    [Authorize(Roles = "Admin")]
     public partial class CategoriesIndex
     {
         private int currentPage = 1;

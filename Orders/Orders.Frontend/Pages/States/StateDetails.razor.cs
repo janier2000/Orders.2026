@@ -8,6 +8,7 @@ using System.Net;
 
 namespace Orders.Frontend.Pages.States
 {
+    [Authorize(Roles = "Admin")]
     public partial class StateDetails
     {
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;

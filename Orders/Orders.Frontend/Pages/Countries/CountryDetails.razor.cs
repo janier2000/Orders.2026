@@ -11,7 +11,7 @@ using System.Net;
 
 namespace Orders.Frontend.Pages.Countries
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public partial class CountryDetails
     {
         private Country? country;
