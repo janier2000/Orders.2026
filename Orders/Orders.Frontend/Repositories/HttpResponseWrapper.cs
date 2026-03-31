@@ -13,6 +13,8 @@ namespace Orders.Frontend.Repositories
 
         public T? Response { get; }
         public bool Error { get; }
+
+        public string? Token { get; }
         public HttpResponseMessage HttpResponseMessage { get; }
 
         public async Task<string?> GetErrorMessageAsync()
