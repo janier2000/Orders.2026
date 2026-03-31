@@ -12,6 +12,8 @@ namespace Orders.Backend.Repositories.Interface
         Task CheckRoleAsync(string roleName);
         Task AddUserToRoleAsync(User user, string roleName);
         Task<bool> IsUserInRoleAsync(User user, string roleName);
+        Task<SignInResult> LoginAsync(LoginDTO model);
+        Task LogoutAsync();
 
 
         //Task<ActionResponse<IEnumerable<User>>> GetAsync(PaginationDTO pagination);
@@ -23,7 +25,5 @@ namespace Orders.Backend.Repositories.Interface
         //Task<User> GetUserAsync(Guid userId);
         //Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword);
         //Task<IdentityResult> UpdateUserAsync(User user);
-        //Task<SignInResult> LoginAsync(LoginDTO model);
-        //Task LogoutAsync();
     }
 }

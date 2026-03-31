@@ -3,10 +3,12 @@ using Orders.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Orders.Backend.UnitsOfWork.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Orders.Backend.Controllers
 {
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
 
     public class CategoriesController : GenericController<Category>

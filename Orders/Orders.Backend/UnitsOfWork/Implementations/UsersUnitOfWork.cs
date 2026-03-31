@@ -21,6 +21,8 @@ namespace Orders.Backend.UnitsOfWork.Implementations
         public async Task CheckRoleAsync(string roleName) => await _usersRepository.CheckRoleAsync(roleName);
         public async Task AddUserToRoleAsync(User user, string roleName) => await _usersRepository.AddUserToRoleAsync(user, roleName);
         public async Task<bool> IsUserInRoleAsync(User user, string roleName) => await _usersRepository.IsUserInRoleAsync(user, roleName);
+        public async Task LogoutAsync() => await _usersRepository.LogoutAsync();
+        public async Task<SignInResult> LoginAsync(LoginDTO model) => await _usersRepository.LoginAsync(model);
 
 
 
@@ -35,9 +37,9 @@ namespace Orders.Backend.UnitsOfWork.Implementations
         //public async Task<string> GenerateEmailConfirmationTokenAsync(User user) => await _usersRepository.GenerateEmailConfirmationTokenAsync(user);
 
         //public async Task<IdentityResult> ConfirmEmailAsync(User user, string token) => await _usersRepository.ConfirmEmailAsync(user, token);
-        //public async Task<SignInResult> LoginAsync(LoginDTO model) => await _usersRepository.LoginAsync(model);
 
-        //public async Task LogoutAsync() => await _usersRepository.LogoutAsync();
+
+
 
         //public async Task<User> GetUserAsync(Guid userId) => await _usersRepository.GetUserAsync(userId);
 
