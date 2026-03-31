@@ -8,6 +8,7 @@ namespace Orders.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class CategoriesController : GenericController<Category>
     {
         private readonly ICategoriesUnitOfWork _categoriesUnitOfWork;
