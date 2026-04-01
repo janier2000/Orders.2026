@@ -65,12 +65,12 @@ namespace Orders.Backend.Controllers
             return BadRequest();
         }
 
-        //[AllowAnonymous]
-        //[HttpGet("combo")]
-        //public async Task<IActionResult> GetComboAsync()
-        //{
-        //    return Ok(await _countriesUnitOfWork.GetComboAsync());
-        //}
+        [AllowAnonymous] // estos sirve para colocar los metodos anonymos
+        [HttpGet("combo")]
+        public async Task<IActionResult> GetComboAsync()
+        {
+            return Ok(await _countriesUnitOfWork.GetComboAsync());
+        }
 
     }
 }

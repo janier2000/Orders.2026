@@ -41,12 +41,12 @@ namespace Orders.Backend.Controllers
             return BadRequest();
         }
 
-        //[AllowAnonymous]
-        //[HttpGet("combo/{countryId:int}")]
-        //public async Task<IActionResult> GetComboAsync(int countryId)
-        //{
-        //    return Ok(await _statesUnitOfWork.GetComboAsync(countryId));
-        //}
+        [AllowAnonymous]
+        [HttpGet("combo/{countryId:int}")]
+        public async Task<IActionResult> GetComboAsync(int countryId)
+        {
+            return Ok(await _statesUnitOfWork.GetComboAsync(countryId));
+        }
 
         [HttpGet]
         public override async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
