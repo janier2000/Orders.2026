@@ -15,7 +15,7 @@ namespace Orders.Backend.Repositories.Implementations
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<User> _signInManager;
 
-        public UsersRepository(DataContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager,, SignInManager<User> signInManager)
+        public UsersRepository(DataContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager)
         {
             _context = context;
             _userManager = userManager;
