@@ -11,10 +11,10 @@ namespace Orders.Frontend.Pages.Auth
     public partial class Register
     {
         private UserDTO userDTO = new();
-        //private List<Country>? countries;
-        //private List<State>? states;
-        //private List<City>? cities;
-        //private bool loading;
+        private List<Country>? countries;
+        private List<State>? states;
+        private List<City>? cities;
+        private bool loading;
         //private string? imageUrl;
 
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
@@ -22,6 +22,23 @@ namespace Orders.Frontend.Pages.Auth
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private ILoginService LoginService { get; set; } = null!;
         //[Parameter, SupplyParameterFromQuery] public bool IsAdmin { get; set; }
+
+        protected override async Task OnInitializedAsync()
+        {
+            await LoadCountriesAsync();
+        }
+
+        private async Task LoadCountriesAsync()
+        {
+            var responseHttp = await Repository.GetAsync<List<Country>>("/api/countries/combo");
+            if (responseHttp.Error)
+            {
+                var message = await responseHttp.GetErrorMessageAsync();
+                await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
+                return;
+            }
+            countries = responseHttp.Response;
+        }
 
 
         private async Task CreteUserAsync()
@@ -51,28 +68,14 @@ namespace Orders.Frontend.Pages.Auth
         }
 
 
+       
 
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    await LoadCountriesAsync();
-        //}
         //private void ImageSelected(string imagenBase64)
         //{
         //    userDTO.Photo = imagenBase64;
         //    imageUrl = null;
         //}
-        //private async Task LoadCountriesAsync()
-        //{
-        //    var responseHttp = await Repository.GetAsync<List<Country>>("/api/countries/combo");
-        //    if (responseHttp.Error)
-        //    {
-        //        var message = await responseHttp.GetErrorMessageAsync();
-        //        await SweetAlertService.FireAsync("Error", message, SweetAlertIcon.Error);
-        //        return;
-        //    }
 
-        //    countries = responseHttp.Response;
-        //}
         //private async Task CountryChangedAsync(ChangeEventArgs e)
         //{
         //    var selectedCountry = Convert.ToInt32(e.Value!);
