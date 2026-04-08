@@ -72,6 +72,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=LocalConnection"));
 builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<IFileStorage, FileStorage>();
+builder.Services.AddScoped<IMailHelper, MailHelper>(); 
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
@@ -82,24 +83,20 @@ builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IStatesRepository, StatesRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 
-//builder.Services.AddScoped<ITemporalOrdersRepository, TemporalOrdersRepository>();
-//builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
-//builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
-
 builder.Services.AddScoped<ICategoriesUnitOfWork, CategoriesUnitOfWork>();
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
 builder.Services.AddScoped<ICountriesUnitOfWork, CountriesUnitOfWork>();
 builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
 builder.Services.AddScoped<IUsersUnitOfWork, UsersUnitOfWork>();
 
-//builder.Services.AddScoped<ITemporalOrdersUnitOfWork, TemporalOrdersUnitOfWork>();
-//builder.Services.AddScoped<IOrdersUnitOfWork, OrdersUnitOfWork>();
-//builder.Services.AddScoped<IProductsUnitOfWork, ProductsUnitOfWork>();
+
 
 
 // codigo sirve par alos requirimientos del  contraseña
 builder.Services.AddIdentity<User, IdentityRole>(x =>
 {
+    x.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+    x.SignIn.RequireConfirmedEmail = true;
     x.User.RequireUniqueEmail = true;
     x.Password.RequireDigit = false;
     x.Password.RequiredUniqueChars = 0;
@@ -107,12 +104,9 @@ builder.Services.AddIdentity<User, IdentityRole>(x =>
     x.Password.RequireNonAlphanumeric = false;
     x.Password.RequireUppercase = false;
     x.Password.RequiredLength = 6;
-
-    //x.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
-    //x.SignIn.RequireConfirmedEmail = true;
-    //x.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    //x.Lockout.MaxFailedAccessAttempts = 3;
-    //x.Lockout.AllowedForNewUsers = true;
+    x.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // cantidad de tiempo bloquiado despues de intento fallidos
+    x.Lockout.MaxFailedAccessAttempts = 3;// sirve para maximo intento de autenticacion
+    x.Lockout.AllowedForNewUsers = true;
 })
     .AddEntityFrameworkStores<DataContext>()
     .AddDefaultTokenProviders();
