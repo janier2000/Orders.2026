@@ -27,7 +27,7 @@ namespace Orders.Backend.Data
             await CheckCatregoriesAsync();
             await CheckRolesAsync();
             ////await CheckProductsAsync();
-            await CheckUserAsync("0001", "machado", "Janier", "jomr@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "JuanZuluaga.jpg", UserType.Admin);
+            await CheckUserAsync("0001", "Machado", "Janier", "jomr10@hotmail.com", "3023772513", "monteria barrio la pradera", "JuanZuluaga.jpg", UserType.Admin);
 
             ////await CheckUserAsync("0002", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpg", UserType.User);
             ////await CheckUserAsync("0003", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
@@ -53,8 +53,8 @@ namespace Orders.Backend.Data
             var user = await _usersUnitOfWork.GetUserAsync(email);
             if (user == null)
             {
-                //var city = await _context.Cities.FirstOrDefaultAsync(x => x.Name == "Medellín");
-                //city ??= await _context.Cities.FirstOrDefaultAsync();
+                var city = await _context.Cities.FirstOrDefaultAsync(x => x.Name == "Medellín");
+                city ??= await _context.Cities.FirstOrDefaultAsync();
 
                 //string filePath;
                 //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -87,8 +87,8 @@ namespace Orders.Backend.Data
                 await _usersUnitOfWork.AddUserAsync(user, "123456");
                 await _usersUnitOfWork.AddUserToRoleAsync(user, userType.ToString());
 
-                //var token = await _usersUnitOfWork.GenerateEmailConfirmationTokenAsync(user);
-                //await _usersUnitOfWork.ConfirmEmailAsync(user, token);
+                var token = await _usersUnitOfWork.GenerateEmailConfirmationTokenAsync(user);
+                await _usersUnitOfWork.ConfirmEmailAsync(user, token);
             }
             return user;
         }
@@ -124,36 +124,36 @@ namespace Orders.Backend.Data
         {
             if (!_context.Countries.Any())
             {
-                _ = _context.Countries.Add(new Country
-                {
-                    Name = "Colombia",
-                    States =
-                    [
-                        new State()
-                        {
-                            Name = "Antioquia",
-                            Cities = [
-                                new() { Name = "Medellín" },
-                                new() { Name = "Itagüí" },
-                                new() { Name = "Envigado" },
-                                new() { Name = "Bello" },
-                                new() { Name = "Rionegro" },
-                                new() { Name = "Marinilla" },
-                            ]
-                        },
-                        new State()
-                        {
-                            Name = "Bogotá",
-                            Cities = [
-                                new() { Name = "Usaquen" },
-                                new() { Name = "Champinero" },
-                                new() { Name = "Santa fe" },
-                                new() { Name = "Useme" },
-                                new() { Name = "Bosa" },
-                            ]
-                        },
-                    ]
-                });
+                //_ = _context.Countries.Add(new Country
+                //{
+                //    Name = "Colombia",
+                //    States =
+                //    [
+                //        new State()
+                //        {
+                //            Name = "Antioquia",
+                //            Cities = [
+                //                new() { Name = "Medellín" },
+                //                new() { Name = "Itagüí" },
+                //                new() { Name = "Envigado" },
+                //                new() { Name = "Bello" },
+                //                new() { Name = "Rionegro" },
+                //                new() { Name = "Marinilla" },
+                //            ]
+                //        },
+                //        new State()
+                //        {
+                //            Name = "Bogotá",
+                //            Cities = [
+                //                new() { Name = "Usaquen" },
+                //                new() { Name = "Champinero" },
+                //                new() { Name = "Santa fe" },
+                //                new() { Name = "Useme" },
+                //                new() { Name = "Bosa" },
+                //            ]
+                //        },
+                //    ]
+                //});
                 _context.Countries.Add(new Country
                 {
                     Name = "Estados Unidos",

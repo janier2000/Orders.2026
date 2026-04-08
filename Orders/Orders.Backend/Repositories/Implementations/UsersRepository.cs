@@ -21,7 +21,11 @@ namespace Orders.Backend.Repositories.Implementations
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
-        }
+        } 
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(User user) => await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        public async Task<IdentityResult> ConfirmEmailAsync(User user, string token) => await _userManager.ConfirmEmailAsync(user, token);
 
         public async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
         {
@@ -77,7 +81,7 @@ namespace Orders.Backend.Repositories.Implementations
 
         public async Task<SignInResult> LoginAsync(LoginDTO model)
         {
-            return await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            return await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, true);
         }
 
         public async Task LogoutAsync()
