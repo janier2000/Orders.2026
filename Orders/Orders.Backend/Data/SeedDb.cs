@@ -22,14 +22,14 @@ namespace Orders.Backend.Data
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
-            //await CheckCountriesFullAsync();
-            await CheckCountriesAsync();
+            //await CheckCountriesFullAsync(); ciudad agregaro manualmente
+            //await CheckCountriesAsync();
             await CheckCatregoriesAsync();
             await CheckRolesAsync();
-            ////await CheckProductsAsync();
+         
             await CheckUserAsync("0001", "Machado", "Janier", "jomr10@hotmail.com", "3023772513", "monteria barrio la pradera", "JuanZuluaga.jpg", UserType.Admin);
 
-            ////await CheckUserAsync("0002", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpg", UserType.User);
+            await CheckUserAsync("0002", "milk", "esposagoku", "milk@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpg", UserType.User);
             ////await CheckUserAsync("0003", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
             ////await CheckUserAsync("0004", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
             ////await CheckUserAsync("0005", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
@@ -41,6 +41,16 @@ namespace Orders.Backend.Data
             ////await CheckUserAsync("0011", "Ozzy", "Osbourne", "ozzy@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "ozzy.jpg", UserType.User);
             ////await CheckUserAsync("0012", "Selena", "Quintanilla", "selenba@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "selena.jpg", UserType.User);
         }
+
+        private async Task CheckCountriesFullAsync()
+        {
+            if (!_context.Countries.Any())
+            {
+                var countriesStatesCitiesSQLScript = File.ReadAllText("Data\\CountriesStatesCities.sql");
+                await _context.Database.ExecuteSqlRawAsync(countriesStatesCitiesSQLScript);
+            }
+        }
+
 
         private async Task CheckRolesAsync()
         {
