@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Orders.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
-using Orders.Shared.Entities;
-using System.Collections.Generic;
-using System.Reflection.Emit;
-//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-//using Microsoft.EntityFrameworkCore;
-//using Orders.Shared.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Orders.Backend.Data
 {
@@ -20,19 +15,25 @@ namespace Orders.Backend.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<State> States { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             //evita duplicados de variable (Name ) en la bd 
             modelBuilder.Entity<Country>().HasIndex(x => x.Name).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(x => x.Name).IsUnique();
+            modelBuilder.Entity<Product>().HasIndex(x => x.Name).IsUnique();
+
             //aca se evita  colocar  la misma ciudad en un estado, pero si permite crear otra ciudad de otro estado
             modelBuilder.Entity<City>().HasIndex(x => new { x.StateId, x.Name }).IsUnique();
             modelBuilder.Entity<State>().HasIndex(x => new { x.CountryId, x.Name }).IsUnique();
             DisableCascadingDelete(modelBuilder);
         }
-
 
         // metodo evita  la eliminacion de datos cuando tiene relacion
         private void DisableCascadingDelete(ModelBuilder modelBuilder)
@@ -45,49 +46,3 @@ namespace Orders.Backend.Data
         }
     }
 }
-
-//﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-//using Microsoft.EntityFrameworkCore;
-//using Orders.Shared.Entities;
-
-//namespace Orders.Backend.Data
-//{
-//    public class DataContext : IdentityDbContext<User>
-//    {
-//        public DataContext(DbContextOptions<DataContext> options) : base(options)
-//        {
-//            Database.SetCommandTimeout(600);
-//        }
-
-//        public DbSet<City> Cities { get; set; }
-//        public DbSet<Category> Categories { get; set; }
-//        public DbSet<Country> Countries { get; set; }
-//        public DbSet<Order> Orders { get; set; }
-//        public DbSet<OrderDetail> OrderDetails { get; set; }
-//        public DbSet<Product> Products { get; set; }
-//        public DbSet<ProductCategory> ProductCategories { get; set; }
-//        public DbSet<ProductImage> ProductImages { get; set; }
-//        public DbSet<State> States { get; set; }
-//        public DbSet<TemporalOrder> TemporalOrders { get; set; }
-
-//        protected override void OnModelCreating(ModelBuilder modelBuilder)
-//        {
-//            base.OnModelCreating(modelBuilder);
-//            modelBuilder.Entity<Category>().HasIndex(x => x.Name).IsUnique();
-//            modelBuilder.Entity<Country>().HasIndex(x => x.Name).IsUnique();
-//            modelBuilder.Entity<City>().HasIndex(x => new { x.StateId, x.Name }).IsUnique();
-//            modelBuilder.Entity<Product>().HasIndex(x => x.Name).IsUnique();
-//            modelBuilder.Entity<State>().HasIndex(x => new { x.CountryId, x.Name }).IsUnique();
-//            DisableCascadingDelete(modelBuilder);
-//        }
-
-//        private void DisableCascadingDelete(ModelBuilder modelBuilder)
-//        {
-//            var relationships = modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys());
-//            foreach (var relationship in relationships)
-//            {
-//                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-//            }
-//        }
-//    }
-//}
