@@ -1,4 +1,6 @@
-﻿using CurrieTechnologies.Razor.SweetAlert2;
+﻿using Blazored.Modal;
+using Blazored.Modal.Services;
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Orders.Frontend.Pages.Countries;
@@ -18,6 +20,7 @@ namespace Orders.Frontend.Pages.Categories
         [Inject] private IRepository Repository { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
         [EditorRequired, Parameter] public int Id { get; set; }
 
         protected override async Task OnParametersSetAsync()
@@ -40,6 +43,7 @@ namespace Orders.Frontend.Pages.Categories
                 category = responseHttp.Response;
             }
         }
+
         private async Task EditAsync()
         {
             var responseHttp = await Repository.PutAsync("/api/categories", category);
@@ -50,6 +54,7 @@ namespace Orders.Frontend.Pages.Categories
                 return;
             }
 
+            //await BlazoredModal.CloseAsync(ModalResult.Ok());
             Return();
 
             var toast = SweetAlertService.Mixin(new SweetAlertOptions
@@ -61,6 +66,7 @@ namespace Orders.Frontend.Pages.Categories
             });
             await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Cambios guardados con éxito.");
         }
+
         private void Return()
         {
             categoryForm!.FormPostedSuccessfully = true;
