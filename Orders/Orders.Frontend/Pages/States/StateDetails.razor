@@ -17,17 +17,9 @@ else
             </span>
         </div>
         <div class="card-body">
+            <Filter PlaceHolder="Buscar Ciudad..." Callback=@FilterCallBack />
             <GenericList MyList="cities!">
                 <Body>
-                    <div class="mb-2" style="display: flex; flex-wrap:wrap; align-items: center;">
-                        <div>
-                            <input style="width: 400px;" type="text" class="form-control" id="titulo" placeholder="Buscar ciudad..." @bind-value="Filter" />
-                        </div>
-                        <div>
-                            <botton type="button" class="btn btn-outline-primary mx-1" @onclick="ApplyFilterAsync">Filtrar</botton>
-                            <botton type="button" class="btn btn-outline-danger" @onclick="CleanFilterAsync">Limpiar</botton><botton type="button" class="btn btn-primary mx-1" @onclick="ApplyFilterAsync">Limpiar</botton>
-                        </div>
-                    </div>
 
                     <Pagination CurrentPage="currentPage"
                                 TotalPages="totalPages"
@@ -48,7 +40,6 @@ else
                                     <td>
                                         <a class="btn btn-warning btn-sm" href="/cities/edit/@city.Id"><i class="bi bi-pencil" /> Editar</a>
                                         <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(city))><i class="bi bi-trash" /> Borrar</button>
-
                                     </td>
                                 </tr>
                             }
@@ -59,56 +50,3 @@ else
         </div>
     </div>
 }
-
-                          @*       ﻿@page "/states/details/{StateId:int}"
-
-@if (state is null)
-{
-    <Loading />
-}
-else
-{
-    <div class="card">
-        <div class="card-header">
-            <span>
-                <i class="bi bi-globe-americas" /> @state.Name
-                <a class="btn btn-sm btn-primary float-end mx-1" @onclick=@(() => ShowModalAsync())><i class="bi bi-plus-square"></i> Adicionar Ciudad</a>
-                <a class="btn btn-sm btn-success float-end" href="/countries/details/@state.CountryId"><i class="bi bi-arrow-left" /> Regresar</a>
-            </span>
-        </div>
-        <div class="card-body">
-            <Filter PlaceHolder="Buscar ciudad..." Callback=@FilterCallBack />
-            <GenericList MyList="cities!">
-                <Body>
-                    <Pagination CurrentPage="currentPage"
-                                TotalPages="totalPages"
-                                SelectedPage="SelectedPageAsync"
-                                RecordsNumber="SelectedRecordsNumberAsync" />
-
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Ciudad</th>
-                                <th style="width:168px"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var city in cities!)
-                            {
-                                <tr>
-                                    <td>
-                                        @city.Name
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-warning btn-sm" @onclick=@(() => ShowModalAsync(city.Id, true))><i class="bi bi-pencil" /> Editar</a>
-                                        <button class="btn btn-danger btn-sm" @onclick=@(() => DeleteAsync(city))><i class="bi bi-trash" /> Borrar</button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </Body>
-            </GenericList>
-        </div>
-    </div>
-} *@

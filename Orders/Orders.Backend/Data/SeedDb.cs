@@ -22,8 +22,8 @@ namespace Orders.Backend.Data
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
-            //await CheckCountriesFullAsync(); ciudad agregaro manualmente
-            //await CheckCountriesAsync();
+            //await CheckCountriesFullAsync();// ciudad agregaro manualmente
+            await CheckCountriesAsync();
             await CheckCatregoriesAsync();
             await CheckRolesAsync();
          
@@ -134,39 +134,39 @@ namespace Orders.Backend.Data
         {
             if (!_context.Countries.Any())
             {
-                //_ = _context.Countries.Add(new Country
-                //{
-                //    Name = "Colombia",
-                //    States =
-                //    [
-                //        new State()
-                //        {
-                //            Name = "Antioquia",
-                //            Cities = [
-                //                new() { Name = "Medellín" },
-                //                new() { Name = "Itagüí" },
-                //                new() { Name = "Envigado" },
-                //                new() { Name = "Bello" },
-                //                new() { Name = "Rionegro" },
-                //                new() { Name = "Marinilla" },
-                //            ]
-                //        },
-                //        new State()
-                //        {
-                //            Name = "Bogotá",
-                //            Cities = [
-                //                new() { Name = "Usaquen" },
-                //                new() { Name = "Champinero" },
-                //                new() { Name = "Santa fe" },
-                //                new() { Name = "Useme" },
-                //                new() { Name = "Bosa" },
-                //            ]
-                //        },
-                //    ]
-                //});
+                _ = _context.Countries.Add(new Country
+                {
+                    Name = "Colombia2",
+                    States =
+                    [
+                        new State()
+                        {
+                            Name = "Antioquia",
+                            Cities = [
+                                new() { Name = "Medellín" },
+                                new() { Name = "Itagüí" },
+                                new() { Name = "Envigado" },
+                                new() { Name = "Bello" },
+                                new() { Name = "Rionegro" },
+                                new() { Name = "Marinilla" },
+                            ]
+                        },
+                        new State()
+                        {
+                            Name = "Bogotá",
+                            Cities = [
+                                new() { Name = "Usaquen" },
+                                new() { Name = "Champinero" },
+                                new() { Name = "Santa fe" },
+                                new() { Name = "Useme" },
+                                new() { Name = "Bosa" },
+                            ]
+                        },
+                    ]
+                });
                 _context.Countries.Add(new Country
                 {
-                    Name = "Estados Unidos",
+                    Name = "Estados Unidos2",
                     States =
                     [
                         new State()
