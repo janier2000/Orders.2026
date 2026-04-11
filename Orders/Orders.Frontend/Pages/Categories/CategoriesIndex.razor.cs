@@ -18,7 +18,8 @@ namespace Orders.Frontend.Pages.Categories
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-     
+        [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
+
         public List<Category>? Categories { get; set; }
    
         protected async override Task OnInitializedAsync()
@@ -54,9 +55,8 @@ namespace Orders.Frontend.Pages.Categories
 
         private async Task<bool> LoadListAsync(int page)
         {
-            //ValidateRecordsNumber();
-            //var url = $"api/categories/?page={page}&recordsnumber={RecordsNumber}";
-            var url = $"api/categories/?page={page}";
+            ValidateRecordsNumber();
+            var url = $"api/categories/?page={page}&recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -75,9 +75,8 @@ namespace Orders.Frontend.Pages.Categories
 
         private async Task LoadPagesAsync()
         {
-            //ValidateRecordsNumber();
-            //var url = $"api/categories/totalPages?recordsnumber={RecordsNumber}";
-            var url = $"api/categories/totalPages";
+            ValidateRecordsNumber();
+            var url = $"api/categories/totalPages?recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -138,6 +137,14 @@ namespace Orders.Frontend.Pages.Categories
                 Timer = 3000
             });
             await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro borrado con éxito.");
+        }
+
+        private void ValidateRecordsNumber()
+        {
+            if (RecordsNumber == 0)
+            {
+                RecordsNumber = 10;
+            }
         }
     }
 }

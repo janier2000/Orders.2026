@@ -29,6 +29,14 @@ namespace Orders.Frontend.Pages.Countries
             await LoadAsync();
         }
 
+        private async Task SelectedRecordsNumberAsync(int recordsnumber)
+        {
+            RecordsNumber = recordsnumber;
+            int page = 1;
+            await LoadAsync(page);
+            await SelectedPageAsync(page);
+        }
+
         private async Task FilterCallBack(string filter)
         {
             Filter = filter;
@@ -51,7 +59,8 @@ namespace Orders.Frontend.Pages.Countries
 
         private async Task LoadPagesAsync()
         {
-            var url = $"api/states/totalPages?id={CountryId}";
+            ValidateRecordsNumber();
+            var url = $"api/states/totalPages?id={CountryId}&recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -69,8 +78,8 @@ namespace Orders.Frontend.Pages.Countries
 
         private async Task<bool> LoadStatesAsync(int page)
         {
-
-            var url = $"api/states?id={CountryId}&page={page}";
+            ValidateRecordsNumber();
+            var url = $"api/states?id={CountryId}&page={page}&recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -159,6 +168,14 @@ namespace Orders.Frontend.Pages.Countries
                 Timer = 3000
             });
             await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro borrado con éxito.");
+        }
+
+        private void ValidateRecordsNumber()
+        {
+            if (RecordsNumber == 0)
+            {
+                RecordsNumber = 10;
+            }
         }
 
     }

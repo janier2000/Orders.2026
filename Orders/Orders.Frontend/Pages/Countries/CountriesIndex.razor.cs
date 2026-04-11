@@ -17,12 +17,21 @@ namespace Orders.Frontend.Pages.Countries
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
-     
+        [Parameter, SupplyParameterFromQuery] public int RecordsNumber { get; set; } = 10;
+
         public List<Country>? Countries { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
             await LoadAsync();
+        }
+
+        private async Task SelectedRecordsNumberAsync(int recordsnumber)
+        {
+            RecordsNumber = recordsnumber;
+            int page = 1;
+            await LoadAsync(page);
+            await SelectedPageAsync(page);
         }
 
         private async Task FilterCallBack(string filter)
@@ -54,7 +63,8 @@ namespace Orders.Frontend.Pages.Countries
 
         private async Task<bool> LoadListAsync(int page)
         {
-            var url = $"api/countries?page={page}";
+            ValidateRecordsNumber();
+            var url = $"api/countries?page={page}&recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -73,7 +83,8 @@ namespace Orders.Frontend.Pages.Countries
 
         private async Task LoadPagesAsync()
         {
-            var url = $"api/countries/totalPages";
+            ValidateRecordsNumber();
+            var url = $"api/countries/totalPages?recordsnumber={RecordsNumber}";
             if (!string.IsNullOrEmpty(Filter))
             {
                 url += $"&filter={Filter}";
@@ -135,6 +146,14 @@ namespace Orders.Frontend.Pages.Countries
                 Timer = 3000
             });
             await toast.FireAsync(icon: SweetAlertIcon.Success, message: "Registro borrado con éxito.");
+        }
+
+        private void ValidateRecordsNumber()
+        {
+            if (RecordsNumber == 0)
+            {
+                RecordsNumber = 10;
+            }
         }
 
     }
