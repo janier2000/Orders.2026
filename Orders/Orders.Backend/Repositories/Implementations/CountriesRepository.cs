@@ -4,7 +4,7 @@ using Orders.Backend.Helpers;
 using Orders.Backend.Repositories.Interfaces;
 using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
-using Orders.Shared.Entities.Responses;
+using Orders.Shared.Responses;
 
 namespace Orders.Backend.Repositories.Implementations
 {

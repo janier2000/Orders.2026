@@ -1,16 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Orders.Backend.Helpers;
-using Orders.Backend.UnitsOfWork.Interfaces;
+﻿using System.Text;
 using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
-using Orders.Shared.Entities.Responses;
-using System;
-using System.IdentityModel.Tokens.Jwt;
+using Orders.Backend.Helpers;
 using System.Security.Claims;
-using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
+using Orders.Backend.UnitsOfWork.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Orders.Backend.Controllers
 {

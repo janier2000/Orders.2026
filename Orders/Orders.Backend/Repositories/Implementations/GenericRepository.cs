@@ -3,7 +3,8 @@ using Orders.Backend.Data;
 using Orders.Backend.Helpers;
 using Orders.Backend.Repositories.Interface;
 using Orders.Shared.DTOs;
-using Orders.Shared.Entities.Responses;
+using Orders.Shared.Responses;
+
 
 namespace Orders.Backend.Repositories.Implementations
 {

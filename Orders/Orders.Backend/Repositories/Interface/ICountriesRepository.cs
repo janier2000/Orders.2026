@@ -1,8 +1,6 @@
 ﻿using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
-using Orders.Shared.Entities.Responses;
-//using Orders.Shared.Responses;
-//using Orders.Shared.DTOs;
+using Orders.Shared.Responses;
 
 namespace Orders.Backend.Repositories.Interfaces
 {

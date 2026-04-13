@@ -1,7 +1,7 @@
-﻿using Orders.Backend.Repositories.Interface;
+﻿using Orders.Shared.DTOs;
+using Orders.Shared.Responses;
+using Orders.Backend.Repositories.Interface;
 using Orders.Backend.UnitsOfWork.Interfaces;
-using Orders.Shared.DTOs;
-using Orders.Shared.Entities.Responses;
 
 namespace Orders.Backend.UnitsOfWork.Implementations
 {

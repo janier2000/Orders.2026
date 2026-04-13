@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Orders.Shared.DTOs;
 using Orders.Backend.Data;
-using Orders.Backend.Helpers;
-using Orders.Backend.Repositories.Interface;
-using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
-using Orders.Shared.Entities.Responses;
+using Orders.Backend.Helpers;
+using Orders.Shared.Responses;
+using Microsoft.EntityFrameworkCore;
+using Orders.Backend.Repositories.Interface;
 
 namespace Orders.Backend.Repositories.Implementations
 {
