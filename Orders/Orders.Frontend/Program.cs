@@ -1,12 +1,13 @@
 using Blazored.Modal;
-using Orders.Frontend;
-using Orders.Frontend.Services;
-using Orders.Frontend.Repositories;
-using Microsoft.AspNetCore.Components.Web;
 using CurrieTechnologies.Razor.SweetAlert2;
-using Orders.Frontend.AuthenticationProviders;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MudBlazor.Services;
+using Orders.Frontend;
+using Orders.Frontend.AuthenticationProviders;
+using Orders.Frontend.Repositories;
+using Orders.Frontend.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -22,6 +23,7 @@ builder.Services.AddSweetAlert2();
 builder.Services.AddAuthorizationCore();
 
 builder.Services.AddBlazoredModal(); //este es el modal
+builder.Services.AddMudServices();
 
 
 
