@@ -41,7 +41,7 @@ namespace Orders.Shared.Entities
 
         [Display(Name = "Usuario")]
         public string FullName => $"{FirstName} {LastName}";
-        public DbSet<TemporalOrder> TemporalOrders { get; set; }
+        public ICollection<TemporalOrder>? TemporalOrders { get; set; }
 
         //public ICollection<Order>? Orders { get; set; }
     }
