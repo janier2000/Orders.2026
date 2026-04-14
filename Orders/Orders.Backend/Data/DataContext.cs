@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Orders.Backend.Data
 {
-    //public class DataContext :     DbContext
     public class DataContext : IdentityDbContext<User>
     {
 
@@ -18,7 +17,7 @@ namespace Orders.Backend.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
-
+        public DbSet<TemporalOrder> TemporalOrders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Orders.Shared.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Orders.Shared.Entities
 {
@@ -40,8 +41,7 @@ namespace Orders.Shared.Entities
 
         [Display(Name = "Usuario")]
         public string FullName => $"{FirstName} {LastName}";
-
-        //public ICollection<TemporalOrder>? TemporalOrders { get; set; }
+        public DbSet<TemporalOrder> TemporalOrders { get; set; }
 
         //public ICollection<Order>? Orders { get; set; }
     }
