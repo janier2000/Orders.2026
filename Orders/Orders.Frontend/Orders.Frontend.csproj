@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Pages\Cart\**" />
-    <Content Remove="Pages\Cart\**" />
-    <EmbeddedResource Remove="Pages\Cart\**" />
-    <None Remove="Pages\Cart\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Blazored.Modal" Version="7.3.1" />
     <PackageReference Include="bootstrap" Version="5.1.0" />
     <PackageReference Include="CurrieTechnologies.Razor.SweetAlert2" Version="5.5.0" />
