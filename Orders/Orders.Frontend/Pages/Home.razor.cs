@@ -15,7 +15,6 @@ namespace Orders.Frontend.Pages
         private int totalPages;
         private int counter = 0;
         private bool isAuthenticated;
-
         public List<Product>? Products { get; set; }
         [Parameter, SupplyParameterFromQuery] public string Page { get; set; } = string.Empty;
         [Parameter, SupplyParameterFromQuery] public string Filter { get; set; } = string.Empty;
@@ -30,7 +29,6 @@ namespace Orders.Frontend.Pages
         {
             await LoadAsync();
         }
-
         protected async override Task OnParametersSetAsync()
         {
             await CheckIsAuthenticatedAsync();
