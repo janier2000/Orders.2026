@@ -1,8 +1,8 @@
 ﻿using Orders.Shared.DTOs;
 using Orders.Backend.Helpers;
-using Orders.Shared.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Orders.Backend.UnitsOfWork.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Orders.Backend.Controllers
@@ -13,11 +13,14 @@ namespace Orders.Backend.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrdersHelper _ordersHelper;
+        private readonly IOrdersUnitOfWork _ordersUnitOfWork;
 
-        public OrdersController(IOrdersHelper ordersHelper)
+        public OrdersController(IOrdersHelper ordersHelper, IOrdersUnitOfWork ordersUnitOfWork)
         {
             _ordersHelper = ordersHelper;
+            _ordersUnitOfWork = ordersUnitOfWork;
         }
+
 
         [HttpPost]
         public async Task<IActionResult> PostAsync(OrderDTO orderDTO)
@@ -29,5 +32,29 @@ namespace Orders.Backend.Controllers
             }
             return BadRequest(response.Message);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
+        {
+            var response = await _ordersUnitOfWork.GetAsync(User.Identity!.Name!, pagination);
+            if (response.WasSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("totalPages")]
+        public async Task<IActionResult> GetPagesAsync([FromQuery] PaginationDTO pagination)
+        {
+            var action = await _ordersUnitOfWork.GetTotalPagesAsync(User.Identity!.Name!, pagination);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
+
+
     }
 }
