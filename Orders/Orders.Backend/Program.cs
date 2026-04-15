@@ -1,28 +1,27 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Orders.Backend.Data;
+using Orders.Backend.Helpers;
+using Orders.Shared.Entities;
+using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Orders.Backend.Data;
-using Orders.Backend.Helpers;
-using Orders.Backend.Repositories.Implementations;
+using System.Text.Json.Serialization;
+using Orders.Backend.UnitsOfWork.Interfaces;
 using Orders.Backend.Repositories.Interface;
 using Orders.Backend.Repositories.Interfaces;
 using Orders.Backend.UnitsOfWork.Implementations;
-using Orders.Backend.UnitsOfWork.Interfaces;
-using Orders.Shared.Entities;
-using System.Text;
-using System.Text.Json.Serialization;
-
+using Orders.Backend.Repositories.Implementations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ayuda a utilzar la api inyectando el token
 // Bearer token [ ojo  dejar espacio]
-builder
-    .Services
-    .AddControllers()
-    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services
+       .AddControllers()
+       .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -59,8 +58,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-
-
 // aca envita los ciclo repetitivos deuno a mavio o varios a uno
 // en al tablas ejemplo el de al ciudad  municipio y  ciudad
 builder
@@ -72,7 +69,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer("name=LocalConnection"));
 builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<IFileStorage, FileStorage>();
-builder.Services.AddScoped<IMailHelper, MailHelper>(); 
+builder.Services.AddScoped<IMailHelper, MailHelper>();
+builder.Services.AddScoped<IOrdersHelper, OrdersHelper>();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericUnitOfWork<>), typeof(GenericUnitOfWork<>));
@@ -84,6 +82,8 @@ builder.Services.AddScoped<IStatesRepository, StatesRepository>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<ITemporalOrdersRepository, TemporalOrdersRepository>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+
 
 builder.Services.AddScoped<ICategoriesUnitOfWork, CategoriesUnitOfWork>();
 builder.Services.AddScoped<ICitiesUnitOfWork, CitiesUnitOfWork>();
@@ -92,6 +92,7 @@ builder.Services.AddScoped<IStatesUnitOfWork, StatesUnitOfWork>();
 builder.Services.AddScoped<IUsersUnitOfWork, UsersUnitOfWork>();
 builder.Services.AddScoped<IProductsUnitOfWork, ProductsUnitOfWork>();
 builder.Services.AddScoped<ITemporalOrdersUnitOfWork, TemporalOrdersUnitOfWork>();
+builder.Services.AddScoped<IOrdersUnitOfWork, OrdersUnitOfWork>();
 
 
 // codigo sirve par alos requirimientos del  contraseña
