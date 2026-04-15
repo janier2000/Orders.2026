@@ -7,7 +7,7 @@ using CurrieTechnologies.Razor.SweetAlert2;
 
 namespace Orders.Frontend.Pages.Cart
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, User")]
     public partial class OrdersIndex
     {
         [Inject] private IRepository repository { get; set; } = null!;
