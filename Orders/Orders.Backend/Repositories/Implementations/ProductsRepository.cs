@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Orders.Shared.DTOs;
 using Orders.Backend.Data;
 using Orders.Backend.Helpers;
-using Orders.Backend.Repositories.Interfaces;
-using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
 using Orders.Shared.Responses;
+using Microsoft.EntityFrameworkCore;
+using Orders.Backend.Repositories.Interfaces;
 
 namespace Orders.Backend.Repositories.Implementations
 {
@@ -59,7 +59,6 @@ namespace Orders.Backend.Repositories.Implementations
                 };
             }
         }
-
 
         public async Task<ActionResponse<ImageDTO>> AddImageAsync(ImageDTO imageDTO)
         {
@@ -142,6 +141,11 @@ namespace Orders.Backend.Repositories.Implementations
                 queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
             }
 
+            if (!string.IsNullOrWhiteSpace(pagination.CategoryFilter))
+            {
+                queryable = queryable.Where(x => x.ProductCategories!.Any(y => y.Category!.Name == pagination.CategoryFilter));
+            }
+
             return new ActionResponse<IEnumerable<Product>>
             {
                 WasSuccess = true,
@@ -158,6 +162,11 @@ namespace Orders.Backend.Repositories.Implementations
             if (!string.IsNullOrWhiteSpace(pagination.Filter))
             {
                 queryable = queryable.Where(x => x.Name.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(pagination.CategoryFilter))
+            {
+                queryable = queryable.Where(x => x.ProductCategories!.Any(y => y.Category!.Name == pagination.CategoryFilter));
             }
 
             double count = await queryable.CountAsync();
