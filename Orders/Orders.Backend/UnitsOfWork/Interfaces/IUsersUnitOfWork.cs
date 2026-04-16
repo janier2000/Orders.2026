@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
+using Orders.Shared.Responses;
 
 
 namespace Orders.Backend.UnitsOfWork.Interfaces
 {
     public interface IUsersUnitOfWork
     {
+        Task<ActionResponse<IEnumerable<User>>> GetAsync(PaginationDTO pagination);
+        Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination);
         Task<string> GenerateEmailConfirmationTokenAsync(User user);
         Task<IdentityResult> ConfirmEmailAsync(User user, string token);
         Task<User> GetUserAsync(string email);

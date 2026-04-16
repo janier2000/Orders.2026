@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Orders.Shared.DTOs;
 using Orders.Backend.Data;
-using Orders.Backend.Repositories.Interface;
-using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
+using Orders.Backend.Helpers;
+using Orders.Shared.Responses;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Orders.Backend.Repositories.Interface;
 
 namespace Orders.Backend.Repositories.Implementations
 {
@@ -20,7 +22,51 @@ namespace Orders.Backend.Repositories.Implementations
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
-        } 
+        }
+
+        public async Task<ActionResponse<IEnumerable<User>>> GetAsync(PaginationDTO pagination)
+        {
+            var queryable = _context.Users
+                                    .Include(u => u.City)
+                                    .ThenInclude(c => c!.State)
+                                    .ThenInclude(s => s!.Country)
+                                    .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.FirstName.ToLower().Contains(pagination.Filter.ToLower()) ||
+                                                    x.LastName.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
+            return new ActionResponse<IEnumerable<User>>
+            {
+                WasSuccess = true,
+                Result = await queryable.OrderBy(x => x.FirstName)
+                                        .ThenBy(x => x.LastName)
+                                        .Paginate(pagination)
+                                        .ToListAsync()
+            };
+        }
+
+        public async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination)
+        {
+            var queryable = _context.Users.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(pagination.Filter))
+            {
+                queryable = queryable.Where(x => x.FirstName.ToLower().Contains(pagination.Filter.ToLower()) ||
+                                                    x.LastName.ToLower().Contains(pagination.Filter.ToLower()));
+            }
+
+            double count = await queryable.CountAsync();
+            double totalPages = Math.Ceiling(count / pagination.RecordsNumber);
+            return new ActionResponse<int>
+            {
+                WasSuccess = true,
+                Result = (int)totalPages
+            };
+        }
+
 
         public async Task<string> GenerateEmailConfirmationTokenAsync(User user) => await _userManager.GenerateEmailConfirmationTokenAsync(user);
 

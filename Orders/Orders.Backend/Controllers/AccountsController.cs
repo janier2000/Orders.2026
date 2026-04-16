@@ -1,14 +1,15 @@
-﻿using System.Text;
-using Orders.Shared.DTOs;
-using Orders.Shared.Entities;
-using Orders.Backend.Helpers;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authorization;
+using Orders.Backend.Helpers;
+using Orders.Backend.Repositories.Interface;
 using Orders.Backend.UnitsOfWork.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Orders.Shared.DTOs;
+using Orders.Shared.Entities;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Orders.Backend.Controllers
 {
@@ -19,7 +20,7 @@ namespace Orders.Backend.Controllers
         private readonly IUsersUnitOfWork _usersUnitOfWork;
         private readonly IConfiguration _configuration;
         private readonly IFileStorage _fileStorage;
-        private readonly IMailHelper _mailHelper;
+        private readonly IMailHelper _mailHelper;       
         private readonly string _container;
 
         public AccountsController(IUsersUnitOfWork usersUnitOfWork, IConfiguration configuration, IFileStorage fileStorage, IMailHelper mailHelper)
@@ -27,9 +28,32 @@ namespace Orders.Backend.Controllers
             _usersUnitOfWork = usersUnitOfWork;
             _configuration = configuration;
             _fileStorage = fileStorage;
-            _mailHelper = mailHelper;
+            _mailHelper = mailHelper;            
             _container = "users";
         }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAsync([FromQuery] PaginationDTO pagination)
+        {
+            var response = await _usersUnitOfWork.GetAsync(pagination);
+            if (response.WasSuccess)
+            {
+                return Ok(response.Result);
+            }
+            return BadRequest();
+        }
+
+        [HttpGet("totalPages")]
+        public async Task<IActionResult> GetPagesAsync([FromQuery] PaginationDTO pagination)
+        {
+            var action = await _usersUnitOfWork.GetTotalPagesAsync(pagination);
+            if (action.WasSuccess)
+            {
+                return Ok(action.Result);
+            }
+            return BadRequest();
+        }
+
 
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmailAsync(string userId, string token)
@@ -49,7 +73,6 @@ namespace Orders.Backend.Controllers
 
             return NoContent();
         }
-
 
         [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser([FromBody] UserDTO model)

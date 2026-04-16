@@ -1,10 +1,9 @@
-using CurrieTechnologies.Razor.SweetAlert2;
-using Microsoft.AspNetCore.Components;
-using Orders.Frontend.Repositories;
-using Orders.Frontend.Services;
 using Orders.Shared.DTOs;
-using Orders.Shared.Entities;
 using Orders.Shared.Enums;
+using Orders.Shared.Entities;
+using Orders.Frontend.Repositories;
+using Microsoft.AspNetCore.Components;
+using CurrieTechnologies.Razor.SweetAlert2;
 
 namespace Orders.Frontend.Pages.Auth
 {
@@ -16,12 +15,10 @@ namespace Orders.Frontend.Pages.Auth
         private List<City>? cities;
         private bool loading;
         private string? imageUrl;
-
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
         [Inject] private SweetAlertService SweetAlertService { get; set; } = null!;
         [Inject] private IRepository Repository { get; set; } = null!;
-        [Inject] private ILoginService LoginService { get; set; } = null!;
-        //[Parameter, SupplyParameterFromQuery] public bool IsAdmin { get; set; }
+        [Parameter, SupplyParameterFromQuery] public bool IsAdmin { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -92,12 +89,10 @@ namespace Orders.Frontend.Pages.Auth
             userDTO.UserName = userDTO.Email;
             userDTO.UserType = UserType.User;
             loading = true;
-            //if (IsAdmin)
-            //{
-            //    userDTO.UserType = UserType.Admin;
-            //}
-
-          
+            if (IsAdmin)
+            {
+                userDTO.UserType = UserType.Admin;
+            }
             var responseHttp = await Repository.PostAsync<UserDTO>("/api/accounts/CreateUser", userDTO);
             loading = false;
 

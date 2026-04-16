@@ -3,6 +3,7 @@ using Orders.Backend.Repositories.Interface;
 using Orders.Backend.UnitsOfWork.Interfaces;
 using Orders.Shared.DTOs;
 using Orders.Shared.Entities;
+using Orders.Shared.Responses;
 
 
 namespace Orders.Backend.UnitsOfWork.Implementations
@@ -14,10 +15,10 @@ namespace Orders.Backend.UnitsOfWork.Implementations
         {
             _usersRepository = usersRepository;
         }
+        public async Task<ActionResponse<IEnumerable<User>>> GetAsync(PaginationDTO pagination) => await _usersRepository.GetAsync(pagination);
+        public async Task<ActionResponse<int>> GetTotalPagesAsync(PaginationDTO pagination) => await _usersRepository.GetTotalPagesAsync(pagination);
         public async Task<string> GenerateEmailConfirmationTokenAsync(User user) => await _usersRepository.GenerateEmailConfirmationTokenAsync(user);
-
         public async Task<IdentityResult> ConfirmEmailAsync(User user, string token) => await _usersRepository.ConfirmEmailAsync(user, token);
-
         public async Task<User> GetUserAsync(string email) => await _usersRepository.GetUserAsync(email);
         public async Task<IdentityResult> AddUserAsync(User user, string password) => await _usersRepository.AddUserAsync(user, password);
         public async Task CheckRoleAsync(string roleName) => await _usersRepository.CheckRoleAsync(roleName);
